@@ -1,0 +1,56 @@
+---
+alwaysApply: true
+---
+
+# Project Context: Next.js Fullstack Todo App
+
+## Stack
+
+-   Next.js (App Router, TypeScript)
+-   MySQL + Prisma ORM
+-   React Query (TanStack) for server state
+-   Zustand for UI-only state
+-   React Hook Form + Zod for forms and validation
+
+## Architecture Rules
+
+-   App Router only (no pages router)
+-   API implemented via Next.js Route Handlers (`app/api/**/route.ts`)
+-   Database access ONLY through Prisma client
+-   Prisma client imported from `src/lib/prisma.ts` (singleton)
+-   Server data handled by React Query (do NOT store in Zustand)
+
+## Coding Conventions
+
+-   TypeScript strict, no `any`
+-   Validate all API inputs with Zod
+-   API responses must be JSON and typed
+-   Use async/await, no callbacks
+-   Prefer small, composable functions
+
+## Frontend Rules
+
+-   Client components only when needed (`'use client'`)
+-   Forms use React Hook Form + Zod resolver
+-   Use optimistic updates for mutations when applicable
+-   Handle loading, error, and empty states explicitly
+
+## Backend Rules
+
+-   Auth via JWT or session cookie
+-   All todo data scoped to authenticated user
+-   Return proper HTTP status codes (401, 404, 400)
+
+## Folder Intent
+
+-   `app/` → routing & layouts
+-   `app/api/` → backend routes
+-   `features/*` → domain logic (hooks, api calls, schemas)
+-   `lib/*` → shared infrastructure (prisma, auth, query client)
+-   `store/*` → UI state only
+
+## What NOT to do
+
+-   No Redux for server data
+-   No direct DB queries outside Prisma
+-   No business logic inside React components

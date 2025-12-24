@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+/* Minimal base styles – extend as you build the app */
+body {
+    @apply bg-white text-black antialiased;
+}
