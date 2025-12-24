@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+    mysql:
+        image: mysql:8.0
+        container_name: todoapp_mysql
+        restart: unless-stopped
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+            MYSQL_DATABASE: ${MYSQL_DATABASE:-todoapp}
+            MYSQL_USER: ${MYSQL_USER:-todoapp_user}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD:-todoapp_password}
+        ports:
+            - "${MYSQL_PORT:-3306}:3306"
+        volumes:
+            # Persist data between container restarts
+            - mysql_data:/var/lib/mysql
+            # Optional: mount init scripts if needed
+            # - ./docker/mysql/init:/docker-entrypoint-initdb.d
+        healthcheck:
+            test:
+                [
+                    "CMD",
+                    "mysqladmin",
+                    "ping",
+                    "-h",
+                    "localhost",
+                    "-u",
+                    "root",
+                    "-p${MYSQL_ROOT_PASSWORD:-rootpassword}",
+                ]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        networks:
+            - todoapp_network
+
+volumes:
+    mysql_data:
+        driver: local
+
+networks:
+    todoapp_network:
+        driver: bridge
