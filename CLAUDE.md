@@ -57,6 +57,12 @@ npx prisma studio              # Open Prisma database browser
 - Use `'use client'` directive only when needed
 - Async/await, no callbacks
 - Prefer small, composable functions
+- **JSDoc**: Add comprehensive JSDoc comments to all exported functions, classes, and complex logic
+  - Include `@param` for parameters with type and description
+  - Include `@returns` for return values with type and description
+  - Include `@throws` for functions that can throw errors
+  - Add `@example` for non-trivial functions to show usage
+  - Include one-line summary describing what the function does
 
 ### API Routes
 - Implement in `app/api/**/route.ts`

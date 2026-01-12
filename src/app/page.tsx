@@ -1,7 +1,0 @@
-export default function Home() {
-    return (
-        <main className="min-h-screen bg-background text-foreground">
-            {/* Empty shell – ready for new UI */}
-        </main>
-    );
-}
