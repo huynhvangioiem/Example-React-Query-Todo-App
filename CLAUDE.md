@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-A fullstack Todo application built with Next.js App Router, MySQL, and Prisma. The project uses Google OAuth for authentication (no password-based auth).
+A fully functional fullstack Todo application built with Next.js App Router, MySQL, and Prisma. The project uses Google OAuth for authentication (no password-based auth).
+
+**Status**: Complete and production-ready with authentication, CRUD operations, optimistic updates, and responsive UI.
 
 ## Commands
 
@@ -28,7 +30,7 @@ npx prisma studio              # Open Prisma database browser
 
 - **Framework**: Next.js 16 (App Router only, no Pages Router)
 - **Database**: MySQL 8.0 via Docker + Prisma 7 ORM
-- **State**: React Query for server state, Zustand for UI-only state
+- **State**: React Query for server state with optimistic updates
 - **Forms**: React Hook Form + Zod validation
 - **Styling**: Tailwind CSS 4
 
@@ -36,9 +38,10 @@ npx prisma studio              # Open Prisma database browser
 
 - `app/` - Routes and layouts (App Router)
 - `app/api/` - API Route Handlers (`route.ts` files)
+- `components/` - React components
 - `features/` - Domain logic (hooks, API calls, Zod schemas)
 - `lib/` - Shared infrastructure (Prisma client, auth, query client)
-- `store/` - Zustand stores (UI state only)
+- `types/` - TypeScript type definitions
 - `generated/prisma/` - Auto-generated Prisma Client
 
 ### Data Flow
@@ -46,7 +49,7 @@ npx prisma studio              # Open Prisma database browser
 - All database access through Prisma client singleton at `src/lib/prisma.ts`
 - API routes validate input with Zod, return typed JSON
 - Frontend fetches via React Query hooks in `features/`
-- Server state in React Query, UI state (theme, sidebar) in Zustand
+- Server state managed by React Query with optimistic updates
 
 ### Database Models
 
@@ -84,6 +87,6 @@ npx prisma studio              # Open Prisma database browser
 
 ### What NOT to Do
 
-- No Redux or storing server data in Zustand
+- No Redux or other state management libraries (use React Query for server state)
 - No direct DB queries outside Prisma client
 - No business logic inside React components

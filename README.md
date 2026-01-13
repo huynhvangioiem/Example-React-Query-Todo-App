@@ -1,15 +1,14 @@
-## Todo App – Fullstack Starter
+## Todo App – Fullstack Application
 
-This project is a **Next.js fullstack Todo application** with infrastructure and tooling pre-configured, ready for feature development.
+A fully functional **Next.js fullstack Todo application** with Google OAuth authentication, MySQL database, and React Query for state management.
 
 ### Tech Stack
 
 - **Framework**: Next.js 16.1.1 (App Router) with TypeScript (strict mode)
+- **Authentication**: Google OAuth via NextAuth.js
 - **Database**: MySQL 8.0 via Docker Compose
 - **ORM**: Prisma 7.2.0
-- **State Management**:
-    - React Query (TanStack Query) for server state
-    - Zustand for UI-only state
+- **State Management**: React Query (TanStack Query) for server state with optimistic updates
 - **Forms & Validation**: React Hook Form + Zod
 - **Styling**: Tailwind CSS 4
 - **React**: 19.2.3
@@ -27,7 +26,15 @@ This project is a **Next.js fullstack Todo application** with infrastructure and
     npm install
     ```
 
-2. **Create `.env` file** in the root directory:
+2. **Set up Google OAuth:**
+    - Go to [Google Cloud Console](https://console.cloud.google.com/)
+    - Create a new project or select an existing one
+    - Enable Google+ API
+    - Go to "Credentials" and create OAuth 2.0 Client ID
+    - Add authorized redirect URI: `http://localhost:3000/api/auth/callback/google`
+    - Copy the Client ID and Client Secret
+
+3. **Create `.env` file** in the root directory:
 
     ```env
     # Database Configuration
@@ -39,15 +46,23 @@ This project is a **Next.js fullstack Todo application** with infrastructure and
 
     # Database Connection String (for Prisma)
     DATABASE_URL="mysql://todoapp_user:todoapp_password@localhost:3306/todoapp"
+
+    # NextAuth Configuration
+    NEXTAUTH_URL="http://localhost:3000"
+    NEXTAUTH_SECRET="your-random-secret-here"  # Generate with: openssl rand -base64 32
+
+    # Google OAuth
+    GOOGLE_CLIENT_ID="your-google-client-id"
+    GOOGLE_CLIENT_SECRET="your-google-client-secret"
     ```
 
-3. **Start MySQL container:**
+4. **Start MySQL container:**
 
     ```bash
     docker-compose up -d
     ```
 
-4. **Run Prisma migrations:**
+5. **Run Prisma migrations:**
 
     ```bash
     npx prisma migrate dev
@@ -57,18 +72,32 @@ This project is a **Next.js fullstack Todo application** with infrastructure and
     - Create the database schema (User and Todo tables)
     - Generate Prisma Client in `src/generated/prisma`
 
-5. **Verify database connection:**
+6. **Start the development server:**
 
     ```bash
-    docker-compose ps
+    npm run dev
     ```
+
+7. **Open the app:**
+
+    Navigate to [http://localhost:3000](http://localhost:3000) and sign in with your Google account.
+
+### Features
+
+- **Authentication**: Google OAuth sign-in with automatic user creation
+- **Todo Management**: Create, read, update, and delete todos
+- **Real-time Updates**: Optimistic UI updates for instant feedback
+- **Filtering**: View all, active, or completed todos
+- **Inline Editing**: Edit todos directly in the list
+- **User Scoped**: Each user only sees their own todos
+- **Responsive Design**: Works on desktop and mobile devices
 
 ### Database Schema
 
 The Prisma schema includes:
 
 - **User** model:
-    - `id` (UUID), `email` (unique), `password` (hashed), `name` (optional)
+    - `id` (UUID), `email` (unique), `googleId` (unique), `name`, `avatarUrl`
     - One-to-many relationship with Todos
 
 - **Todo** model:
@@ -114,47 +143,65 @@ const todos = await prisma.todo.findMany();
 
 ```
 src/
-├── app/              # Next.js App Router (routes & layouts)
-│   ├── api/         # API route handlers (to be created)
-│   ├── layout.tsx   # Root layout
-│   └── page.tsx     # Home page
-├── features/        # Domain logic (hooks, API calls, schemas) - to be created
-├── lib/             # Shared infrastructure
-│   └── prisma.ts    # Prisma Client singleton
-├── store/           # Zustand stores (UI state only) - to be created
-└── generated/       # Generated Prisma Client
+├── app/                      # Next.js App Router (routes & layouts)
+│   ├── (protected)/         # Protected routes (require auth)
+│   │   ├── layout.tsx       # Protected layout wrapper
+│   │   └── page.tsx         # Home/Todo page
+│   ├── api/                 # API route handlers
+│   │   ├── auth/           # NextAuth endpoints
+│   │   └── todos/          # Todo CRUD endpoints
+│   ├── login/              # Login page
+│   └── layout.tsx          # Root layout with providers
+├── components/              # React components
+│   ├── providers/          # Context providers
+│   ├── AddTodoForm.tsx     # New todo form
+│   ├── TodoList.tsx        # Todo list container
+│   ├── TodoItem.tsx        # Individual todo item
+│   ├── TodoFilters.tsx     # Filter buttons
+│   └── UserMenu.tsx        # User menu with sign out
+├── features/               # Domain logic
+│   ├── auth/              # Auth hooks
+│   └── todos/             # Todo hooks, queries, schemas
+├── lib/                    # Shared infrastructure
+│   ├── prisma.ts          # Prisma Client singleton
+│   ├── auth.ts            # NextAuth config
+│   ├── auth-utils.ts      # Auth utilities
+│   └── query-client.ts    # React Query config
+├── types/                  # TypeScript types
+└── generated/              # Generated Prisma Client
     └── prisma/
 ```
 
-### Current State
+### Application Status
 
-✅ **Infrastructure Ready:**
+✅ **Fully Implemented:**
 
-- Next.js App Router with TypeScript (strict mode)
-- MySQL database configured with Docker Compose
-- Prisma schema with User and Todo models
-- Initial migration created and ready to apply
-- Prisma Client singleton pattern implemented
-- All dependencies installed (React Query, Zustand, React Hook Form, Zod, Tailwind CSS)
-
-🚧 **To Be Built:**
-
-- Authentication (login, protected routes)
-- Todo CRUD API endpoints
-- Todo UI components and pages
-- React Query hooks for data fetching
-- Zustand stores for UI state (theme, sidebar, etc.)
+- **Authentication**: Google OAuth with NextAuth.js, protected routes
+- **Database**: MySQL with Prisma ORM, User and Todo models
+- **API**: RESTful endpoints for todo CRUD operations
+- **Frontend**: Complete UI with forms, lists, filters, and inline editing
+- **State Management**: React Query with optimistic updates
+- **Validation**: Zod schemas for all inputs
+- **Styling**: Tailwind CSS with responsive design
+- **Type Safety**: Full TypeScript coverage with strict mode
 
 ### Architecture Guidelines
 
 - **App Router only** (no Pages Router)
 - **API routes** via Next.js Route Handlers (`app/api/**/route.ts`)
 - **Database access** ONLY through Prisma client (`src/lib/prisma.ts`)
-- **Server state** handled by React Query (NOT Zustand)
-- **UI state** (theme, sidebar) handled by Zustand
+- **Server state** handled by React Query with optimistic updates
 - **Forms** use React Hook Form + Zod validation
+- **Authentication** via NextAuth.js with Google OAuth only
 - **Type safety** throughout (no `any` types)
+- **JSDoc comments** on all exported functions
 
-### Next Steps
+### Development Workflow
 
-See `Ticket.md` for the full development roadmap and epic breakdown.
+1. Make changes to your code
+2. Test locally with `npm run dev`
+3. Run linting with `npm run lint`
+4. Create database migrations with `npx prisma migrate dev` (if schema changed)
+5. View database with `npx prisma studio`
+
+For more detailed architecture and conventions, see [CLAUDE.md](CLAUDE.md).
