@@ -26,18 +26,13 @@ import { useSession, signIn, signOut } from "next-auth/react";
  * ```
  */
 export function useAuth() {
-  const { data: session, status } = useSession();
+    const { data: session, status } = useSession();
 
-  return {
-    /** The authenticated user object, or null if not authenticated */
-    user: session?.user ?? null,
-    /** True while checking authentication status */
-    isLoading: status === "loading",
-    /** True if user is authenticated */
-    isAuthenticated: status === "authenticated",
-    /** Initiate Google sign-in flow */
-    signIn: () => signIn("google"),
-    /** Sign out and redirect to login page */
-    signOut: () => signOut({ callbackUrl: "/login" }),
-  };
+    return {
+        user: session?.user ?? null,                        // The authenticated user object, or null if not authenticated
+        isLoading: status === "loading",                    // True while checking authentication status
+        isAuthenticated: status === "authenticated",        // True if user is authenticated
+        signIn: () => signIn("google"),                     // Initiate Google sign-in flow
+        signOut: () => signOut({ callbackUrl: "/login" }), // Sign out and redirect to login page
+    };
 }
