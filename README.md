@@ -4,20 +4,20 @@ This project is a **Next.js fullstack Todo application** with infrastructure and
 
 ### Tech Stack
 
--   **Framework**: Next.js 16.1.1 (App Router) with TypeScript (strict mode)
--   **Database**: MySQL 8.0 via Docker Compose
--   **ORM**: Prisma 7.2.0
--   **State Management**:
-    -   React Query (TanStack Query) for server state
-    -   Zustand for UI-only state
--   **Forms & Validation**: React Hook Form + Zod
--   **Styling**: Tailwind CSS 4
--   **React**: 19.2.3
+- **Framework**: Next.js 16.1.1 (App Router) with TypeScript (strict mode)
+- **Database**: MySQL 8.0 via Docker Compose
+- **ORM**: Prisma 7.2.0
+- **State Management**:
+    - React Query (TanStack Query) for server state
+    - Zustand for UI-only state
+- **Forms & Validation**: React Hook Form + Zod
+- **Styling**: Tailwind CSS 4
+- **React**: 19.2.3
 
 ### Prerequisites
 
--   Node.js 18+ and npm
--   Docker and Docker Compose
+- Node.js 18+ and npm
+- Docker and Docker Compose
 
 ### Project Setup
 
@@ -54,8 +54,8 @@ This project is a **Next.js fullstack Todo application** with infrastructure and
     ```
 
     This will:
-    -   Create the database schema (User and Todo tables)
-    -   Generate Prisma Client in `src/generated/prisma`
+    - Create the database schema (User and Todo tables)
+    - Generate Prisma Client in `src/generated/prisma`
 
 5. **Verify database connection:**
 
@@ -67,14 +67,14 @@ This project is a **Next.js fullstack Todo application** with infrastructure and
 
 The Prisma schema includes:
 
--   **User** model:
-    -   `id` (UUID), `email` (unique), `password` (hashed), `name` (optional)
-    -   One-to-many relationship with Todos
+- **User** model:
+    - `id` (UUID), `email` (unique), `password` (hashed), `name` (optional)
+    - One-to-many relationship with Todos
 
--   **Todo** model:
-    -   `id` (UUID), `title`, `description` (optional), `completed` (boolean)
-    -   Foreign key to User (`userId`)
-    -   Indexed on `userId` and `completed`
+- **Todo** model:
+    - `id` (UUID), `title`, `description` (optional), `completed` (boolean)
+    - Foreign key to User (`userId`)
+    - Indexed on `userId` and `completed`
 
 ### Prisma Client
 
@@ -91,20 +91,20 @@ const todos = await prisma.todo.findMany();
 
 ### Scripts
 
--   **`npm run dev`**: Start the development server on `http://localhost:3000`
--   **`npm run build`**: Create a production build
--   **`npm run start`**: Run the production build
--   **`npm run lint`**: Run ESLint
+- **`npm run dev`**: Start the development server on `http://localhost:3000`
+- **`npm run build`**: Create a production build
+- **`npm run start`**: Run the production build
+- **`npm run lint`**: Run ESLint
 
 ### Docker Commands
 
--   **Stop MySQL container:**
+- **Stop MySQL container:**
 
     ```bash
     docker-compose down
     ```
 
--   **Stop and remove volumes (⚠️ deletes all data):**
+- **Stop and remove volumes (⚠️ deletes all data):**
 
     ```bash
     docker-compose down -v
@@ -130,30 +130,30 @@ src/
 
 ✅ **Infrastructure Ready:**
 
--   Next.js App Router with TypeScript (strict mode)
--   MySQL database configured with Docker Compose
--   Prisma schema with User and Todo models
--   Initial migration created and ready to apply
--   Prisma Client singleton pattern implemented
--   All dependencies installed (React Query, Zustand, React Hook Form, Zod, Tailwind CSS)
+- Next.js App Router with TypeScript (strict mode)
+- MySQL database configured with Docker Compose
+- Prisma schema with User and Todo models
+- Initial migration created and ready to apply
+- Prisma Client singleton pattern implemented
+- All dependencies installed (React Query, Zustand, React Hook Form, Zod, Tailwind CSS)
 
 🚧 **To Be Built:**
 
--   Authentication (login, protected routes)
--   Todo CRUD API endpoints
--   Todo UI components and pages
--   React Query hooks for data fetching
--   Zustand stores for UI state (theme, sidebar, etc.)
+- Authentication (login, protected routes)
+- Todo CRUD API endpoints
+- Todo UI components and pages
+- React Query hooks for data fetching
+- Zustand stores for UI state (theme, sidebar, etc.)
 
 ### Architecture Guidelines
 
--   **App Router only** (no Pages Router)
--   **API routes** via Next.js Route Handlers (`app/api/**/route.ts`)
--   **Database access** ONLY through Prisma client (`src/lib/prisma.ts`)
--   **Server state** handled by React Query (NOT Zustand)
--   **UI state** (theme, sidebar) handled by Zustand
--   **Forms** use React Hook Form + Zod validation
--   **Type safety** throughout (no `any` types)
+- **App Router only** (no Pages Router)
+- **API routes** via Next.js Route Handlers (`app/api/**/route.ts`)
+- **Database access** ONLY through Prisma client (`src/lib/prisma.ts`)
+- **Server state** handled by React Query (NOT Zustand)
+- **UI state** (theme, sidebar) handled by Zustand
+- **Forms** use React Hook Form + Zod validation
+- **Type safety** throughout (no `any` types)
 
 ### Next Steps
 

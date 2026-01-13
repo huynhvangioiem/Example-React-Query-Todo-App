@@ -12,11 +12,11 @@ import { redirect } from "next/navigation";
  * @throws Redirects to /login if not authenticated
  */
 export async function getRequiredSession() {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.id) {
-    redirect("/login");
-  }
-  return session;
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+        redirect("/login");
+    }
+    return session;
 }
 
 /**
@@ -29,6 +29,6 @@ export async function getRequiredSession() {
  * @returns The user object or null
  */
 export async function getCurrentUser() {
-  const session = await getServerSession(authOptions);
-  return session?.user ?? null;
+    const session = await getServerSession(authOptions);
+    return session?.user ?? null;
 }
