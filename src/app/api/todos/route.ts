@@ -3,14 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
-
-/**
- * Todo creation schema
- */
-const createTodoSchema = z.object({
-    title: z.string().min(1, "Title is required").max(200, "Title too long"),
-    description: z.string().max(1000, "Description too long").optional(),
-});
+import { createTodoSchema } from "@/features/todos/schemas";
 
 /**
  * GET /api/todos

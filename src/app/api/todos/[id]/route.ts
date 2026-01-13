@@ -3,15 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
-
-/**
- * Todo update schema
- */
-const updateTodoSchema = z.object({
-    title: z.string().min(1, "Title is required").max(200, "Title too long").optional(),
-    description: z.string().max(1000, "Description too long").optional(),
-    completed: z.boolean().optional(),
-});
+import { updateTodoSchema } from "@/features/todos/schemas";
 
 type RouteContext = {
     params: Promise<{ id: string }>;
