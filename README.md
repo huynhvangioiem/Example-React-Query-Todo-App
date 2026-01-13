@@ -172,36 +172,4 @@ src/
     └── prisma/
 ```
 
-### Application Status
-
-✅ **Fully Implemented:**
-
-- **Authentication**: Google OAuth with NextAuth.js, protected routes
-- **Database**: MySQL with Prisma ORM, User and Todo models
-- **API**: RESTful endpoints for todo CRUD operations
-- **Frontend**: Complete UI with forms, lists, filters, and inline editing
-- **State Management**: React Query with optimistic updates
-- **Validation**: Zod schemas for all inputs
-- **Styling**: Tailwind CSS with responsive design
-- **Type Safety**: Full TypeScript coverage with strict mode
-
-### Architecture Guidelines
-
-- **App Router only** (no Pages Router)
-- **API routes** via Next.js Route Handlers (`app/api/**/route.ts`)
-- **Database access** ONLY through Prisma client (`src/lib/prisma.ts`)
-- **Server state** handled by React Query with optimistic updates
-- **Forms** use React Hook Form + Zod validation
-- **Authentication** via NextAuth.js with Google OAuth only
-- **Type safety** throughout (no `any` types)
-- **JSDoc comments** on all exported functions
-
-### Development Workflow
-
-1. Make changes to your code
-2. Test locally with `npm run dev`
-3. Run linting with `npm run lint`
-4. Create database migrations with `npx prisma migrate dev` (if schema changed)
-5. View database with `npx prisma studio`
-
 For more detailed architecture and conventions, see [CLAUDE.md](CLAUDE.md).
