@@ -52,18 +52,21 @@ Integrate MySQL database with Prisma ORM.
 
 ---
 
-## 🔐 **Epic 2: Authentication (Backend + Frontend)**
+## 🔐 **Epic 2: Authentication (Google OAuth: Backend + Frontend)**
 
-### 🎫 2.1 Auth API: Login
+### 🎫 2.1 Auth API: Google Login
 
 **Description:**
-Implement login API using Next.js Route Handlers.
+Implement Google OAuth-based login using Next.js Route Handlers (no password-based auth).
 
 **Acceptance Criteria:**
 
--   Endpoint: `POST /api/auth/login`
--   Validate request body with Zod
--   Verify email & password
+-   Google OAuth configured (Client ID/Secret in `.env`)
+-   OAuth callback handled via Next.js Route Handler (e.g. `GET /api/auth/google/callback`)
+-   On successful Google login:
+    -   User record is created/updated in DB (no password stored)
+    -   Session cookie or JWT issued and scoped to user
+    -   Basic user profile returned (id, name, email, avatar)
 -   Returns:
     -   JWT token _or_ session cookie
     -   User info
