@@ -10,13 +10,9 @@ import { ReactNode } from "react";
  *
  * Any page placed in app/(protected)/ will require authentication.
  */
-export default async function ProtectedLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
-  // This will redirect to /login if not authenticated
-  await getRequiredSession();
+export default async function ProtectedLayout({ children }: { children: ReactNode }) {
+    // This will redirect to /login if not authenticated
+    await getRequiredSession();
 
-  return <>{children}</>;
+    return <>{children}</>;
 }

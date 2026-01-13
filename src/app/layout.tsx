@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/components/providers/AuthProvider";
+import { QueryProvider } from "@/components/providers/QueryProvider";
 
 export const metadata: Metadata = {
     title: "Todo App",
@@ -15,7 +16,9 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body>
-                <AuthProvider>{children}</AuthProvider>
+                <AuthProvider>
+                    <QueryProvider>{children}</QueryProvider>
+                </AuthProvider>
             </body>
         </html>
     );

@@ -3,40 +3,30 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
-
-/**
- * Todo creation schema
- */
-const createTodoSchema = z.object({
-  title: z.string().min(1, "Title is required").max(200, "Title too long"),
-  description: z.string().max(1000, "Description too long").optional(),
-});
+import { createTodoSchema } from "@/features/todos/schemas";
 
 /**
  * GET /api/todos
  * Get all todos for the authenticated user
  */
 export async function GET() {
-  const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions);
 
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+    if (!session?.user?.id) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
-  try {
-    const todos = await prisma.todo.findMany({
-      where: { userId: session.user.id },
-      orderBy: { createdAt: "desc" },
-    });
+    try {
+        const todos = await prisma.todo.findMany({
+            where: { userId: session.user.id },
+            orderBy: { createdAt: "desc" },
+        });
 
-    return NextResponse.json(todos);
-  } catch (error) {
-    console.error("Error fetching todos:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch todos" },
-      { status: 500 }
-    );
-  }
+        return NextResponse.json(todos);
+    } catch (error) {
+        console.error("Error fetching todos:", error);
+        return NextResponse.json({ error: "Failed to fetch todos" }, { status: 500 });
+    }
 }
 
 /**
@@ -44,37 +34,34 @@ export async function GET() {
  * Create a new todo for the authenticated user
  */
 export async function POST(request: Request) {
-  const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions);
 
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  try {
-    const body = await request.json();
-    const validatedData = createTodoSchema.parse(body);
-
-    const todo = await prisma.todo.create({
-      data: {
-        title: validatedData.title,
-        description: validatedData.description,
-        userId: session.user.id,
-        completed: false,
-      },
-    });
-
-    return NextResponse.json(todo, { status: 201 });
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: "Invalid input", details: error.issues },
-        { status: 400 }
-      );
+    if (!session?.user?.id) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    console.error("Error creating todo:", error);
-    return NextResponse.json(
-      { error: "Failed to create todo" },
-      { status: 500 }
-    );
-  }
+
+    try {
+        const body = await request.json();
+        const validatedData = createTodoSchema.parse(body);
+
+        const todo = await prisma.todo.create({
+            data: {
+                title: validatedData.title,
+                description: validatedData.description,
+                userId: session.user.id,
+                completed: false,
+            },
+        });
+
+        return NextResponse.json(todo, { status: 201 });
+    } catch (error) {
+        if (error instanceof z.ZodError) {
+            return NextResponse.json(
+                { error: "Invalid input", details: error.issues },
+                { status: 400 }
+            );
+        }
+        console.error("Error creating todo:", error);
+        return NextResponse.json({ error: "Failed to create todo" }, { status: 500 });
+    }
 }
